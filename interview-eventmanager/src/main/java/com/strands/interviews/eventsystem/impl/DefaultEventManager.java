@@ -30,13 +30,20 @@ public class DefaultEventManager implements EventManager
             System.err.println("Null event fired?");
             return;
         }
+        // use hash set to avoid duplicate listener if registered for multiple levels
+        Collection listeners = new HashSet<>();
+        Class currentEventClass = event.getClass();
+        while (currentEventClass != null && currentEventClass != Object.class) {
+            listeners.addAll(calculateListeners(currentEventClass));
+            currentEventClass = currentEventClass.getSuperclass();
+        }
 
-        sendEventTo(event, calculateListeners(event.getClass()));
+        sendEventTo(event, listeners);
     }
 
-    private Collection calculateListeners(Class eventClass)
-    {
-        return (Collection) listenersByClass.get(eventClass);
+    private Collection calculateListeners(Class eventClass) {
+        Collection listeners = (Collection) listenersByClass.get(eventClass);
+        return listeners != null ? listeners : Collections.EMPTY_LIST;
     }
 
     public void registerListener(String listenerKey, InterviewEventListener listener)

@@ -14,12 +14,12 @@ public class SubEventTest {
     private final EventManager eventManager = new DefaultEventManager();
 
     @Test
-    public void testSimpleEventListenerDoesNotReceiveSubEventNotification() {
+    public void testSimpleEventListenerShouldReceiveSubEventNotification() {
         EventListenerMock simpleEventListener = new EventListenerMock(new Class[]{SimpleEvent.class});
         eventManager.registerListener("simpleEvent.key", simpleEventListener);
         eventManager.publishEvent(new SubEvent(this));
-        assertEquals(0, simpleEventListener.count);
-        assertFalse(simpleEventListener.isCalled());
+        assertEquals(1, simpleEventListener.count);
+        assertTrue(simpleEventListener.isCalled());
     }
 
     @Test
