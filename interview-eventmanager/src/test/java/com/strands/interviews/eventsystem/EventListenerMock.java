@@ -1,6 +1,6 @@
 package com.strands.interviews.eventsystem;
 
-class EventListenerMock implements InterviewEventListener
+public class EventListenerMock implements InterviewEventListener
 {
     private boolean called;
     Class[] classes;
