@@ -10,16 +10,34 @@ package com.strands.spf;
  */
 public class SingleInstance {
 
-  public SingleInstance() {
-    // TODO Auto-generated constructor stub
+  private static volatile SingleInstance instance;
+
+  private SingleInstance() {}
+
+  public static SingleInstance getInstance() {
+    if (instance == null) {
+      synchronized (SingleInstance.class) {
+        if (instance == null) {
+          instance = new SingleInstance();
+        }
+      }
+    }
+    return instance;
   }
 
   /**
    * @param args
    */
   public static void main(String[] args) {
-    // TODO Auto-generated method stub
+    // To run this example, move the file to interview-eventmanager/src/main/java/com/strands/interviews
+    // and update the package name to 'package com.strands.interviews;'
+    Runnable task = () -> {
+      SingleInstance instance = SingleInstance.getInstance();
+      System.out.println("Instance used " + instance);
+    };
 
+    new Thread(task).start();
+    new Thread(task).start();
+    new Thread(task).start();
   }
-
 }
