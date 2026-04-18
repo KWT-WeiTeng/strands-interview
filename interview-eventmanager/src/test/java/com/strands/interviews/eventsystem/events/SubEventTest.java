@@ -1,6 +1,5 @@
 package com.strands.interviews.eventsystem.events;
 
-
 import com.strands.interviews.eventsystem.EventListenerMock;
 import com.strands.interviews.eventsystem.EventManager;
 import com.strands.interviews.eventsystem.impl.DefaultEventManager;

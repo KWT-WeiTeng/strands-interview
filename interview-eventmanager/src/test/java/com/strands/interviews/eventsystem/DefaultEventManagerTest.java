@@ -1,11 +1,15 @@
 package com.strands.interviews.eventsystem;
 
+import com.strands.interviews.eventsystem.events.CreationEvent;
 import com.strands.interviews.eventsystem.events.SimpleEvent;
 import com.strands.interviews.eventsystem.events.SubEvent;
 import com.strands.interviews.eventsystem.impl.DefaultEventManager;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class DefaultEventManagerTest
 {
@@ -24,6 +28,19 @@ public class DefaultEventManagerTest
         eventManager.registerListener("some.key", eventListenerMock);
         eventManager.publishEvent(new SimpleEvent(this));
         assertTrue(eventListenerMock.isCalled());
+    }
+
+    @Test
+    public void testRegisterListenerWithoutEventClassShouldListenToAllEvents() {
+        EventListenerMock listenerWithoutEventClass = new EventListenerMock(new Class[]{});
+        eventManager.registerListener("some.key", listenerWithoutEventClass);
+        eventManager.publishEvent(new SimpleEvent(this));
+        assertEquals(1, listenerWithoutEventClass.count);
+        eventManager.publishEvent(new SubEvent(this));
+        assertEquals(2, listenerWithoutEventClass.count);
+        eventManager.publishEvent(new CreationEvent(this));
+        assertEquals(3, listenerWithoutEventClass.count);
+        assertTrue(listenerWithoutEventClass.isCalled());
     }
 
     @Test
